@@ -1,0 +1,21 @@
+sequenceDiagram
+    participant User
+    participant Frontend (Next.js)
+    participant Backend (NestJS)
+    participant Cache (Redis)
+    participant ExternalAPIs as "OpenWeatherMap / WeatherAPI"
+
+    User->>Frontend: Acessa a página para a cidade "São Paulo"
+    Frontend->>Backend: GET /weather?city=Sao+Paulo
+    Backend->>Cache: EXISTS weather:sao_paulo
+    alt Cache Hit
+        Cache-->>Backend: Retorna dados cacheados
+        Backend-->>Frontend: Responde com dados
+        Frontend->>User: Renderiza o dashboard
+    else Cache Miss
+        Backend->>ExternalAPIs: GET /forecast?q=Sao+Paulo&...
+        ExternalAPIs-->>Backend: Retorna dados meteorológicos
+        Backend->>Cache: SET weather:sao_paulo (com expiração)
+        Backend-->>Frontend: Responde com dados
+        Frontend->>User: Renderiza o dashboard
+    end

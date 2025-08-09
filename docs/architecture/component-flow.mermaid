@@ -1,0 +1,21 @@
+C4Container
+    title Diagrama de Contêineres - Weather Dashboard
+
+    Person(user, "Usuário", "Visualiza o dashboard meteorológico.")
+
+    System_Boundary(c1, "Weather Dashboard System") {
+        Container(frontend, "Frontend WebApp", "Next.js, TypeScript, TailwindCSS", "O PWA que o usuário interage. Renderiza a UI e faz chamadas para o Backend API.")
+        Container(backend, "Backend API", "NestJS, TypeScript", "Fornece dados meteorológicos para o frontend. Gerencia a lógica de negócio, cache e integração com APIs externas.")
+        ContainerDb(database, "Database", "PostgreSQL", "Armazena informações de usuários, cidades favoritas e configurações.")
+        ContainerDb(cache, "Cache", "Redis", "Armazena em cache as respostas das APIs externas para reduzir a latência.")
+    }
+
+    System_Ext(open_weather_api, "OpenWeatherMap API", "API externa primária.")
+    System_Ext(weather_api, "WeatherAPI", "API externa de fallback.")
+
+    Rel(user, frontend, "Acessa", "HTTPS")
+    Rel(frontend, backend, "Faz requisições para", "HTTPS/JSON")
+    Rel(backend, cache, "Lê/Escreve", "TCP")
+    Rel(backend, database, "Lê/Escreve", "TCP")
+    Rel(backend, open_weather_api, "Obtém dados de", "HTTPS/JSON")
+    Rel(backend, weather_api, "Obtém dados de", "HTTPS/JSON")

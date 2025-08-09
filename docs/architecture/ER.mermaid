@@ -1,0 +1,26 @@
+erDiagram
+    USER {
+        int id PK
+        string username
+        string email
+        string password_hash
+        datetime created_at
+    }
+
+    USER_SETTINGS {
+        int id PK
+        int user_id FK
+        string units "e.g., 'metric' or 'imperial'"
+        boolean dark_mode_enabled
+    }
+
+    FAVORITE_LOCATION {
+        int id PK
+        int user_id FK
+        string city_name
+        float latitude
+        float longitude
+    }
+
+    USER ||--o{ USER_SETTINGS : "has one"
+    USER ||--o{ FAVORITE_LOCATION : "has many"

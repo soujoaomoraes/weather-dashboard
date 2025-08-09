@@ -1,0 +1,14 @@
+C4Context
+    title Diagrama de Contexto do Sistema - Weather Dashboard
+
+    Person(user, "Usuário", "Qualquer pessoa que queira consultar a previsão do tempo.")
+    System(weather_dashboard, "Weather Dashboard", "WebApp que permite aos usuários visualizar dados meteorológicos em tempo real e previsões.")
+
+    System_Ext(open_weather_api, "OpenWeatherMap API", "Fornece dados meteorológicos e previsões.")
+    System_Ext(weather_api, "WeatherAPI", "Fonte de dados meteorológicos de fallback.")
+    System_Ext(browser_geo, "Browser Geolocation", "Fornece a localização do usuário via API do navegador.")
+
+    Rel(user, weather_dashboard, "Usa")
+    Rel(weather_dashboard, open_weather_api, "Obtém dados de", "HTTPS/JSON")
+    Rel(weather_dashboard, weather_api, "Obtém dados de (fallback)", "HTTPS/JSON")
+    Rel(weather_dashboard, browser_geo, "Obtém localização do usuário")
