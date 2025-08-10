@@ -1,13 +1,28 @@
 version: '3.8'
 
 services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: weather_dashboard_frontend
+    ports:
+      - "80:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - /app/.next
+    command: npm run dev
+    depends_on:
+      - backend
+
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
     container_name: weather_dashboard_backend
     ports:
-      - "3000:3000"
+      - "3001:3000"
     env_file:
       - ./backend/.env
     depends_on:

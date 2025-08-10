@@ -1,26 +1,33 @@
 erDiagram
     USER {
-        int id PK
-        string username
-        string email
-        string password_hash
-        datetime created_at
+        int id PK "User ID"
+        varchar name "User's full name"
+        varchar email "User's email address (unique)"
+        varchar password_hash "Hashed password"
+        datetime created_at "Timestamp of creation"
+        datetime updated_at "Timestamp of last update"
     }
 
-    USER_SETTINGS {
-        int id PK
-        int user_id FK
-        string units "e.g., 'metric' or 'imperial'"
-        boolean dark_mode_enabled
+    LOCATION {
+        int id PK "Location ID"
+        varchar name "City name (e.g., London)"
+        decimal latitude "Latitude coordinate"
+        decimal longitude "Longitude coordinate"
+        varchar country "Country code (e.g., GB)"
     }
 
-    FAVORITE_LOCATION {
-        int id PK
-        int user_id FK
-        string city_name
-        float latitude
-        float longitude
+    USER_SAVED_LOCATION {
+        int user_id FK "Foreign key to USER"
+        int location_id FK "Foreign key to LOCATION"
     }
 
-    USER ||--o{ USER_SETTINGS : "has one"
-    USER ||--o{ FAVORITE_LOCATION : "has many"
+    WEATHER_DATA {
+        int location_id FK "Foreign key to LOCATION"
+        json data "Cached weather data from external API"
+        datetime last_fetched_at "Timestamp of when the data was fetched"
+    }
+
+    USER ||--o{ USER_SAVED_LOCATION : "saves"
+    LOCATION ||--o{ USER_SAVED_LOCATION : "is saved in"
+
+    LOCATION ||--|| WEATHER_DATA : "has_cached_data"
